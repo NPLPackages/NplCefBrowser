@@ -1,2 +1,2 @@
 # NplCefBrowser
-Cef browser for Npl
+Cef browser in Npl
