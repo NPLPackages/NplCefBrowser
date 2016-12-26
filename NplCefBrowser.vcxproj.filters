@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Mod">
+      <UniqueIdentifier>{9d99beab-cbe8-421b-9ac9-b8f95743653c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mod\NplCefBrowser">
+      <UniqueIdentifier>{1d145e39-15bf-42af-b17f-bbd3e54238d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mod\NplCefBrowser\main.lua">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
+    <None Include="Mod\NplCefBrowser\NplCefBrowserManager.lua">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
+  </ItemGroup>
+</Project>
