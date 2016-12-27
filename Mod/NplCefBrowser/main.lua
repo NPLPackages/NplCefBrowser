@@ -42,7 +42,6 @@ function NplCefBrowser:init()
 	if(NplCefBrowserManager:HasCefPlugin())then
 		NplCefBrowserManager:Start();
 	end
-	self:RegisterCommand();
 end
 
 function NplCefBrowser:OnLogin()
@@ -58,14 +57,5 @@ end
 
 function NplCefBrowser:OnDestroy()
 end
-function NplCefBrowser:RegisterCommand()
-	local Commands = commonlib.gettable("MyCompany.Aries.Game.Commands");
-	Commands["nplbrowser"] = {
-		name="nplbrowser", 
-		quick_ref="/nplbrowser", 
-		desc="open a web browser", 
-		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
-		end,
-	};
-end
+
 

@@ -7,11 +7,11 @@ use the lib:
 ------------------------------------------------------------
 NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
 local NplCefBrowserManager = commonlib.gettable("Mod.NplCefBrowserManager");
-NplCefBrowserManager:Open(nil,"http://www.wikicraft.cn");
-NplCefBrowserManager:Show(nil,false);
-NplCefBrowserManager:ChangePosSize(nil,100,100,400,400);
-NplCefBrowserManager:Delete(nil);
-NplCefBrowserManager:NewWindow(nil,"http://www.wikicraft.cn");
+local id = nil;
+NplCefBrowserManager:Open({id = id, url = "http://www.wikicraft.cn", withControl = true, x = 0, y = 0, width = 800, height = 600, });
+NplCefBrowserManager:Show({id = id, visible = false});
+NplCefBrowserManager:ChangePosSize({id = id, x = 100, y = 100, width = 400, height = 400, });
+NplCefBrowserManager:Delete({id = id,});
 NplCefBrowserManager:Quit();
 ------------------------------------------------------------
 ]]
@@ -21,7 +21,6 @@ function NplCefBrowserManager:Init()
 	self.mRootWindows = {};
 	local cefroot = System.os.args("cefroot", "Mod/NplCefBrowser/cef3")
 	local cefdebug = System.os.args("cefdebug", "false")
-	LOG.std(nil, "info", "NplCefBrowserManager", "cefroot:%s", cefroot);
 	self.cefroot = cefroot;
 	self.is_start = false;
 	if(cefdebug == "true" or cefdebug == "True" )then
@@ -32,14 +31,34 @@ function NplCefBrowserManager:Init()
 		self.process_name = self.cefroot .. "/NplCefProcess.exe";
 	end
 	self.default_id = "cef_default_window";
-end
 
+	LOG.std(nil, "info", "NplCefBrowserManager", "===========================Init===========================");
+	LOG.std(nil, "info", "NplCefBrowserManager", "cefroot:%s", cefroot);
+	LOG.std(nil, "info", "NplCefBrowserManager", "process_name:%s", self.process_name);
+	LOG.std(nil, "info", "NplCefBrowserManager", "plugin_name:%s", self.plugin_name);
+end
+function NplCefBrowserManager:CreateBrowserParams()
+	local params = {
+		cmd = nil,
+		subProcessName = nil,
+		parentHandle = nil,
+		id = nil,
+		url = nil,
+		showTitleBar = false,
+		withControl = false,
+		x = 0,
+		y = 0,
+		width = 800,
+		height = 600,
+		visible = true,
+		resize = true,
+	}
+	return params;
+end
 function NplCefBrowserManager:HasCefPlugin()
 	local root = ParaIO.GetCurDirectory(0);
 	local process_path = root .. self:GetProcessName();
 	local plugin_path = root .. self:GetPluginName();
-	LOG.std(nil, "info", "NplCefBrowserManager", "process_path:%s", process_path);
-	LOG.std(nil, "info", "NplCefBrowserManager", "plugin_path:%s", plugin_path);
 	if(ParaIO.DoesFileExist(process_path) and ParaIO.DoesFileExist(plugin_path))then
 		return true;
 	end
@@ -48,118 +67,79 @@ function NplCefBrowserManager:Start()
 	if(self.is_start)then
 		return
 	end	
-	LOG.std(nil, "info", "NplCefBrowserManager", "Start");
 	self.is_start = true;
-	self:CreateOrOpen();
+	local p = self:CreateBrowserParams();
+	p.cmd= "Start";
+	p.subProcessName = self:GetProcessName()
+	p.parentHandle = self:GetParentHandle();
+	NplCefBrowserManager:DoActivate(p);
+end
+function NplCefBrowserManager:Open(p)
+	p = p or self:CreateBrowserParams();
+	p.cmd= "Open";
+	p.visible = true;
+	p.id = p.id or self:GetDefaultID();
+	self:MapWindowConfig(id,p)
+	NplCefBrowserManager:DoActivate(p);
+end
+function NplCefBrowserManager:ChangePosSize(p)
+	p = p or self:CreateBrowserParams();
+	p.cmd= "ChangePosSize";
+	p.id = p.id or self:GetDefaultID();
+	p.resize = true;
+	self:MapWindowConfig(p.id,p)
+	NplCefBrowserManager:DoActivate(p);
+end
+function NplCefBrowserManager:Delete(p)
+	p = p or self:CreateBrowserParams();
+	p.cmd= "Delete";
+	p.id = p.id or self:GetDefaultID();
+	self:DeleteWindowConfig(p.id)
+	NplCefBrowserManager:DoActivate(p);
+end
+function NplCefBrowserManager:Show(p)
+	p = p or self:CreateBrowserParams();
+	p.cmd= "Show";
+	p.id = p.id or self:GetDefaultID();
+	self:MapWindowConfig(p.id)
+	NplCefBrowserManager:DoActivate(p);
+end
+function NplCefBrowserManager:Quit(p)
+	p = p or self:CreateBrowserParams();
+	p.cmd= "Quit";
+	NplCefBrowserManager:DoActivate(p);
+
+	self.mRootWindows = {};
+	self.is_start = false;
+end
+function NplCefBrowserManager:DoActivate(value)
+	local name = self:GetPluginName();
+	if(not name)then
+		LOG.std(nil, "error", "NplCefBrowserManager", "plugin name is nil.");
+		return
+	end
+	LOG.std(nil, "info", "NplCefBrowserManager DoActivate", value);
+	if(not value)then
+		return
+	end
+	NPL.activate(name,value);
 end
 function NplCefBrowserManager:GetDefaultID()
 	return self.default_id;
 end
-function NplCefBrowserManager:Open(id,url)
-	id = id or self:GetDefaultID();
-	LOG.std(nil, "info", "NplCefBrowserManager", "Open:%s %s",id,url);
-	self:CreateOrOpen(id, url, false, false, true, false, nil, nil, nil, nil);
-end
-function NplCefBrowserManager:Show(id,visible)
-	local name = self:GetPluginName();
-	if(not name)then
-		return
-	end
-	id = id or self:GetDefaultID();
-	LOG.std(nil, "info", "NplCefBrowserManager", "Show:%s %s",id, tostring(visible));
-	NPL.activate(name,{ cmd = "Show", 
-						subProcessName = self:GetProcessName(),
-						parentHandle = self:GetParentHandle(),
-						id = id,
-						visible = visible,
-	});
-end
-function NplCefBrowserManager:ChangePosSize(id,x,y,width,height)
-	id = id or self:GetDefaultID();
-	local name = self:GetPluginName();
-	if(not name)then
-		return
-	end
-	LOG.std(nil, "info", "NplCefBrowserManager", "ChangePosSize:%s %d %d %d %d",id,x,y,width,height);
-	NPL.activate(name,{ cmd = "ChangePosSize", 
-						subProcessName = self:GetProcessName(),
-						parentHandle = self:GetParentHandle(),
-						id = id,
-						x = x or 0,
-						y = y or 0,
-						width = width or 800,
-						height = height or 600,
-						visible = true,
-	});
-end
-function NplCefBrowserManager:Delete(id)
-	id = id or self:GetDefaultID();
-	local name = self:GetPluginName();
-	if(not name)then
-		return
-	end
-	LOG.std(nil, "info", "NplCefBrowserManager", "Delete:%s",id);
-	NPL.activate(name,{ cmd = "Delete", 
-						subProcessName = self:GetProcessName(),
-						parentHandle = self:GetParentHandle(),
-						id = id,
-	});
-	self:DeleteRootWindow(id);
-end
-function NplCefBrowserManager:Quit()
-	local name = self:GetPluginName();
-	if(not name)then
-		return
-	end
-	LOG.std(nil, "info", "NplCefBrowserManager", "Quit");
-	NPL.activate(name,{ cmd = "Quit", 
-						subProcessName = self:GetProcessName(),
-						parentHandle = self:GetParentHandle(),
-	});
-	self.mRootWindows = {};
-	self.is_start = false;
-end
-function NplCefBrowserManager:NewWindow(id,url,x,y,width,height)
-	id = id or self:GetDefaultID();
-	self:CreateOrOpen(id, url, false, false, true, true, x, y, width, height);
-	LOG.std(nil, "info", "NplCefBrowserManager", "NewWindow:%s %s %d %d %d %d",id,url,x, y, width, height);
-end
-function NplCefBrowserManager:CreateOrOpen(id, url, showTitleBar, withControl, visible, resize, x, y, width, height)
-	local name = self:GetPluginName();
-	id = id or self:GetDefaultID();
-	LOG.std(nil, "info", "NplCefBrowserManager", "Plugin:%s CreateOrOpen:%s %s",name,id,url);
-	if(name)then
-		NPL.activate(name,{ cmd = "CreateOrOpen", 
-		subProcessName = self:GetProcessName(),
-		parentHandle = self:GetParentHandle(),
-		id = id,
-		url = url,
-		showTitleBar = showTitleBar,
-		withControl = withControl,
-		x = x or 0,
-		y = y or 0,
-		width = width or 800,
-		height = height or 600,
-		resize = resize, 
-		visible = visible,
-		}); 
-
-		self:AddRootWindow(id);
-	end
-end
-function NplCefBrowserManager:HasRootWindow(id)
+function NplCefBrowserManager:GetWindowConfig(id)
 	if(not id)then
 		return
 	end
 	return self.mRootWindows[id];
 end
-function NplCefBrowserManager:AddRootWindow(id)
+function NplCefBrowserManager:MapWindowConfig(id,value)
 	if(not id)then
 		return
 	end
-	self.mRootWindows[id] = true;
+	self.mRootWindows[id] = value;
 end
-function NplCefBrowserManager:DeleteRootWindow(id)
+function NplCefBrowserManager:DeleteWindowConfig(id)
 	if(not id)then
 		return
 	end
