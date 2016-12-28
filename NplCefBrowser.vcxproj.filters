@@ -15,5 +15,11 @@
     <None Include="Mod\NplCefBrowser\NplCefBrowserManager.lua">
       <Filter>Mod\NplCefBrowser</Filter>
     </None>
+    <None Include="Mod\NplCefBrowser\pe_cefbrowser.lua">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
+    <None Include="Mod\NplCefBrowser\test_pe_cefbrowser.html">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
   </ItemGroup>
 </Project>

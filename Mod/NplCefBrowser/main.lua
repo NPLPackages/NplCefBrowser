@@ -37,6 +37,11 @@ function NplCefBrowser:init()
 	LOG.std(nil, "info", "NplCefBrowser", "plugin initialized");
 	local root = ParaIO.GetCurDirectory(0);
 	LOG.std(nil, "info", "NplCefBrowser root", root);
+	
+	NPL.load("(gl)Mod/NplCefBrowser/pe_cefbrowser.lua");
+	local Elements = commonlib.gettable("System.Windows.mcml.Elements");
+	Elements.pe_cefbrowser:RegisterAs("cefbrowser","pe:cefbrowser");
+	commonlib.echo("=======================RegisterAs");
 
 	NplCefBrowserManager:Init();
 	if(NplCefBrowserManager:HasCefPlugin())then
