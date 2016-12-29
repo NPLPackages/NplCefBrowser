@@ -1,0 +1,43 @@
+<!-- "Mod/NplCefBrowser/test_pe_cefbrowser.html" -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>test_pe_cefbrowser</title>
+</head>
+<pe:mcml>
+<script type="text/npl" refresh="false">
+<![CDATA[
+    NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
+    local NplCefWindowManager = commonlib.gettable("Mod.NplCefWindowManager");
+    local page_ctrl = document:GetPageCtrl();
+    local name = page_ctrl.name;
+
+    NplCefWindowManager:AddPageCtrl(name,page_ctrl)
+
+    local config = NplCefWindowManager:GetConfig(name);
+
+    NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
+    local NplCefBrowserManager = commonlib.gettable("Mod.NplCefBrowserManager");
+    function GetTitle()
+        return config.title or "";
+    end
+    function DoHide()
+        NplCefWindowManager:Show(name,false)
+    end
+    function DoDestroy()
+        NplCefWindowManager:Destroy(name)
+    end
+]]>
+</script>
+    <pe:div style="background-color:#000000;width:821px;height:640px;">
+        <pe:div style="float:left;height:30px;">
+            <pe:div style="float:left;width:700px;color:#ffffff;padding:2px;"><%=GetTitle()%></pe:div>
+            <input type="button" value="__" style="float:left;width:25px;height:25px;margin-left:60px;margin-top:3px;" onclick="DoHide()"/>
+            <input type="button" value="X" style="float:left;width:25px;height:25px;margin-left:5px;margin-top:3px;" onclick="DoDestroy()"/>
+        </pe:div>
+        <pe:cefbrowser name="cefbrowser_instance" withControl="true" style="margin-left:10px;margin-right:10px;width:800px;height:600px;"/>
+        <pe:div style="height:10px;">
+        </pe:div>
+    </pe:div>
+</html>
+

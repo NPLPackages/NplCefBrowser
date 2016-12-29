@@ -144,8 +144,10 @@
   <ItemGroup>
     <None Include="Mod\NplCefBrowser\main.lua" />
     <None Include="Mod\NplCefBrowser\NplCefBrowserManager.lua" />
+    <None Include="Mod\NplCefBrowser\NplCefWindowManager.lua" />
     <None Include="Mod\NplCefBrowser\pe_cefbrowser.lua" />
-    <None Include="Mod\NplCefBrowser\test_pe_cefbrowser.html" />
+    <None Include="Mod\NplCefBrowser\pe_cefbrowser_template.html" />
+    <None Include="Mod\NplCefBrowser\test_nplcef_window.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,7 +18,13 @@
     <None Include="Mod\NplCefBrowser\pe_cefbrowser.lua">
       <Filter>Mod\NplCefBrowser</Filter>
     </None>
-    <None Include="Mod\NplCefBrowser\test_pe_cefbrowser.html">
+    <None Include="Mod\NplCefBrowser\NplCefWindowManager.lua">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
+    <None Include="Mod\NplCefBrowser\pe_cefbrowser_template.html">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
+    <None Include="Mod\NplCefBrowser\test_nplcef_window.lua">
       <Filter>Mod\NplCefBrowser</Filter>
     </None>
   </ItemGroup>

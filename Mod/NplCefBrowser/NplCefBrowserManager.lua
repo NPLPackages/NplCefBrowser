@@ -13,10 +13,6 @@ NplCefBrowserManager:Show({id = id, visible = false});
 NplCefBrowserManager:ChangePosSize({id = id, x = 100, y = 100, width = 400, height = 400, });
 NplCefBrowserManager:Delete({id = id,});
 NplCefBrowserManager:Quit();
-
-NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
-local NplCefBrowserManager = commonlib.gettable("Mod.NplCefBrowserManager");
-NplCefBrowserManager:Test();
 ------------------------------------------------------------
 ]]
 local NplCefBrowserManager = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.NplCefBrowserManager"));
@@ -105,7 +101,7 @@ function NplCefBrowserManager:Show(p)
 	p = p or self:CreateBrowserParams();
 	p.cmd= "Show";
 	p.id = p.id or self:GetDefaultID();
-	self:MapWindowConfig(p.id)
+	self:MapWindowConfig(p.id,p)
 	NplCefBrowserManager:DoActivate(p);
 end
 function NplCefBrowserManager:Quit(p)
@@ -163,19 +159,4 @@ function NplCefBrowserManager:GetProcessName()
 end
 function NplCefBrowserManager:GetParentHandle()
 	return ParaEngine.GetAttributeObject():GetField("AppHWND", 0);
-end
-
-
-function NplCefBrowserManager:Test(url)
-	NPL.load("(gl)script/ide/System/Windows/Window.lua");
-	local Window = commonlib.gettable("System.Windows.Window");
-	local window = Window:new();
-	url  = url or "Mod/NplCefBrowser/test_pe_cefbrowser.html"
-	window:Show({
-		name = "NplCefBrowserManager",
-		url = url, 
-		alignment ="_lt", left = 100, top = 100, width = 820, height = 640,
-		allowDrag = true, 
-		enable_esc_key = true,
-	});
 end
