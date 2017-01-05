@@ -29,15 +29,18 @@
     end
 ]]>
 </script>
-    <pe:div style="background-color:#000000;width:821px;height:640px;">
-        <pe:div style="float:left;height:30px;">
-            <pe:div style="float:left;width:700px;color:#ffffff;padding:2px;"><%=GetTitle()%></pe:div>
-            <input type="button" value="__" style="float:left;width:25px;height:25px;margin-left:60px;margin-top:3px;" onclick="DoHide()"/>
-            <input type="button" value="X" style="float:left;width:25px;height:25px;margin-left:5px;margin-top:3px;" onclick="DoDestroy()"/>
+    <pe:resizeable name="root" style="background-color:#000000;" width="100%" height="100%">
+        <pe:div style="height:30px;" width="100%">
+            <pe:div style="position:relative;color:#ffffff;padding:10px;" width="100%" height="100%"><%=GetTitle()%></pe:div>
+            <pe:div style="padding:top:5px;">
+                <input type="button" value="X" align="right" style="width:25px;height:25px;margin-right:5px;" onclick="DoDestroy()"/>
+                <input type="button" value="__" align="right" style="width:25px;height:25px;margin-right:65px;" onclick="DoHide()"/>
+            </pe:div>
+            
         </pe:div>
-        <pe:cefbrowser name="cefbrowser_instance" withControl="true" style="margin-left:10px;margin-right:10px;width:800px;height:600px;"/>
-        <pe:div style="height:10px;">
+        <pe:div style="padding:5px;" width="100%" height="100%" >
+            <pe:cefbrowser name="cefbrowser_instance" withControl="true"  width="100%" height="100%" />
         </pe:div>
-    </pe:div>
+    </pe:resizeable>
 </html>
 

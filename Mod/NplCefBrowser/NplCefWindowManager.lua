@@ -16,8 +16,8 @@ local NplCefWindowManager = commonlib.inherit(commonlib.gettable("Mod.ModBase"),
 NplCefWindowManager.page_ctrls = {};
 NplCefWindowManager.config = {};
 NplCefWindowManager.withControl = true;
-NplCefWindowManager.width = 820;
-NplCefWindowManager.height = 640;
+NplCefWindowManager.width = 1024;
+NplCefWindowManager.height = 768;
 NplCefWindowManager.default_window_name = "NplCefWindow_Instance";
 NplCefWindowManager.cefbrowser_name = "cefbrowser_instance"; -- the same as pe_cefbrowser_template.html
 NplCefWindowManager.default_template_url = "Mod/NplCefBrowser/pe_cefbrowser_template.html";
@@ -47,13 +47,11 @@ function NplCefWindowManager:Open(name, title, url, x, y)
 			alignment ="_lt", left = x, top = y, width = self.width, height = self.height,
 			allowDrag = true, 
 		});
-		if(url)then
-			NPL.load("(gl)script/ide/timer.lua");
-			local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
-				self:Reload(name,url);
-			end})
-			mytimer:Change(500)
-		end
+		NPL.load("(gl)script/ide/timer.lua");
+		local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+			self:Reload(name,url);
+		end})
+		mytimer:Change(500)
 		
 	end
 end
@@ -70,6 +68,15 @@ function NplCefWindowManager:Show(name,bShow)
 			page_ctrl:CloseWindow();
 		end
 		cefbrowser_node:Show(bShow);
+	end
+end
+function NplCefWindowManager:EnableWindow(name,enabled)
+	name = name or self.default_window_name;
+	local page_ctrl = self:GetPageCtrl(name);
+	if(page_ctrl)then
+		local window = page_ctrl:GetWindow();
+		local cefbrowser_node = self:GetCefBrowserNode(name);
+		cefbrowser_node:EnableWindow(enabled);
 	end
 end
 function NplCefWindowManager:Reload(name,url)

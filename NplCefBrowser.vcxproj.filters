@@ -27,5 +27,11 @@
     <None Include="Mod\NplCefBrowser\test_nplcef_window.lua">
       <Filter>Mod\NplCefBrowser</Filter>
     </None>
+    <None Include="Mod\NplCefBrowser\ResizeableControl.lua">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
+    <None Include="Mod\NplCefBrowser\pe_resizeable.lua">
+      <Filter>Mod\NplCefBrowser</Filter>
+    </None>
   </ItemGroup>
 </Project>

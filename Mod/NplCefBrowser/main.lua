@@ -38,10 +38,13 @@ function NplCefBrowser:init()
 	local root = ParaIO.GetCurDirectory(0);
 	LOG.std(nil, "info", "NplCefBrowser root", root);
 	
-	NPL.load("(gl)Mod/NplCefBrowser/pe_cefbrowser.lua");
+
+	NPL.load("(gl)Mod/NplCefBrowser/pe_resizeable.lua");
 	local Elements = commonlib.gettable("System.Windows.mcml.Elements");
+	Elements.pe_resizeable:RegisterAs("resizeable","pe:resizeable");
+
+	NPL.load("(gl)Mod/NplCefBrowser/pe_cefbrowser.lua");
 	Elements.pe_cefbrowser:RegisterAs("cefbrowser","pe:cefbrowser");
-	commonlib.echo("=======================RegisterAs");
 
 	NplCefBrowserManager:Init();
 	if(NplCefBrowserManager:HasCefPlugin())then

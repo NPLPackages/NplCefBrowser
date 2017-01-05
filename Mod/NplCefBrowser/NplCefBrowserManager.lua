@@ -52,6 +52,7 @@ function NplCefBrowserManager:CreateBrowserParams()
 		height = 600,
 		visible = true,
 		resize = true,
+		enabled = true,
 	}
 	return params;
 end
@@ -100,6 +101,13 @@ end
 function NplCefBrowserManager:Show(p)
 	p = p or self:CreateBrowserParams();
 	p.cmd= "Show";
+	p.id = p.id or self:GetDefaultID();
+	self:MapWindowConfig(p.id,p)
+	NplCefBrowserManager:DoActivate(p);
+end
+function NplCefBrowserManager:EnableWindow(p)
+	p = p or self:CreateBrowserParams();
+	p.cmd= "EnableWindow";
 	p.id = p.id or self:GetDefaultID();
 	self:MapWindowConfig(p.id,p)
 	NplCefBrowserManager:DoActivate(p);

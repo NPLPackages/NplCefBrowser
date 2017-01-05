@@ -9,20 +9,21 @@ NPL.load("(gl)Mod/NplCefBrowser/pe_cefbrowser.lua");
 Elements.pe_cefbrowser:RegisterAs("cefbrowser","pe:cefbrowser");
 ------------------------------------------------------------
 ]]
+NPL.load("(gl)script/ide/System/Windows/mcml/Elements/pe_div.lua");
+NPL.load("(gl)script/ide/System/Windows/MouseEvent.lua");
+NPL.load("(gl)script/ide/math/Point.lua");
 NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
+NPL.load("(gl)script/ide/System/Windows/mcml/PageElement.lua");
+
+local Point = commonlib.gettable("mathlib.Point");
+local MouseEvent = commonlib.gettable("System.Windows.MouseEvent");
 local NplCefBrowserManager = commonlib.gettable("Mod.NplCefBrowserManager");
 
-NPL.load("(gl)script/ide/math/Point.lua");
-local Point = commonlib.gettable("mathlib.Point");
 
-
-NPL.load("(gl)script/ide/System/Windows/mcml/PageElement.lua");
 local pe_cefbrowser = commonlib.inherit(commonlib.gettable("System.Windows.mcml.PageElement"), commonlib.gettable("System.Windows.mcml.Elements.pe_cefbrowser"));
-pe_cefbrowser:Property({"class_name", "pe:cefbrowser"});
 function pe_cefbrowser:OnAfterChildLayout(layout, left, top, right, bottom)
 	local width = right-left;
 	local height = bottom-top;
-	
 	local page_ctrl = self:GetPageCtrl();
 	local id = self:GetID()
 	local w = page_ctrl:GetWindow();
@@ -37,9 +38,15 @@ function pe_cefbrowser:OnAfterChildLayout(layout, left, top, right, bottom)
 	if(NplCefBrowserManager:GetWindowConfig(id))then
 		NplCefBrowserManager:ChangePosSize({id = id, url = url, x = x, y = y, width = width, height = height, });
 	else
-		NplCefBrowserManager:Open({id = id, url = url, withControl = withControl, x = x, y = y, width = width, height = height, });
+		NplCefBrowserManager:Open({id = id, url = url, withControl = withControl, x = x, y = y, width = width, height = height, showTitleBar = true,});
 	end
 	CommonCtrl.AddControl(id, id);
+
+
+	w.sizeEvent = function(o, event)
+		commonlib.echo("=========event");
+		commonlib.echo(event);
+	end
 end
 function pe_cefbrowser:GetID()
 	local page_ctrl = self:GetPageCtrl();
@@ -50,6 +57,12 @@ function pe_cefbrowser:Show(bShow)
 	local id = self:GetID()
 	if(NplCefBrowserManager:GetWindowConfig(id))then
 		NplCefBrowserManager:Show({id = id, visible = bShow, });
+	end
+end
+function pe_cefbrowser:EnableWindow(enabled)
+	local id = self:GetID()
+	if(NplCefBrowserManager:GetWindowConfig(id))then
+		NplCefBrowserManager:EnableWindow({id = id, enabled = enabled, });
 	end
 end
 function pe_cefbrowser:Destroy()

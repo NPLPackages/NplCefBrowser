@@ -11,6 +11,10 @@ test_nplcef_window.Open1();
 test_nplcef_window.Open2();
 test_nplcef_window.Open3();
 test_nplcef_window.Reload3();
+
+NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
+local NplCefWindowManager = commonlib.gettable("Mod.NplCefWindowManager");
+NplCefWindowManager:EnableWindow("test_2",false)
 ------------------------------------------------------------
 ]]
 NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
@@ -22,7 +26,8 @@ function test_nplcef_window.Open1()
 	NplCefWindowManager:Open();
 end
 function test_nplcef_window.Open2()
-	NplCefWindowManager:Open("test_2","Title", "www.wikicraft.cn");
+	NplCefWindowManager:Open("test_2","Title");
+	--NplCefWindowManager:Open("test_2","Title", "www.wikicraft.cn");
 end
 function test_nplcef_window.Open3()
 	NplCefWindowManager:Open("test_3","测试","www.wikicraft.cn", 200, 200);
