@@ -46,6 +46,8 @@ function NplCefBrowser:init()
 	NPL.load("(gl)Mod/NplCefBrowser/pe_cefbrowser.lua");
 	Elements.pe_cefbrowser:RegisterAs("cefbrowser","pe:cefbrowser");
 
+	--first unzip cef3 dll
+	NplCefBrowserManager:UnzipCefDll();
 	NplCefBrowserManager:Init();
 	if(NplCefBrowserManager:HasCefPlugin())then
 		NplCefBrowserManager:Start();

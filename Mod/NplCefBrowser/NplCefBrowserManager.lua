@@ -24,18 +24,23 @@ local NplCefBrowserManager = commonlib.inherit(commonlib.gettable("Mod.ModBase")
 function NplCefBrowserManager:UnzipCefDll()
 	LOG.std(nil, "info", "NplCefBrowserManager", "UnzipCefDll");
 	local filename = "Mod/NplCefBrowser.zip";
+	local cef3_root = "/cef3";
 	if(ParaIO.DoesAssetFileExist(filename, true))then
-		ParaAsset.OpenArchive(filename,false);	
-		local output = commonlib.Files.Find(nil, "", 0, 10000, "*.*", filename)
+		LOG.std(nil, "info", "NplCefBrowserManager", "ParaAsset.OpenArchive:%s",filename);
+		ParaAsset.OpenArchive(filename);	
+		local output = commonlib.Files.SearchFiles({}, cef3_root, {":.*dll", ":.*bin", ":.*exe", ":.*pak", ":.*dat"}, 10, 10000, true, nil, filename);
+		commonlib.echo("============output");
+		commonlib.echo(output);
 		if(output and #output>0) then
-			commonlib.echo("==========output");
-			commonlib.echo(output);
-
-			local k,v;
+			local k,v; 
 			for k,v in ipairs(output) do
-			ParaIO.CopyFile(v.filename, "test/" .. v.filename, true);
+				local source_path = v;
+				local dest_path = "Mod/" .. source_path;
+				commonlib.echo({source_path, dest_path});
+				ParaIO.CopyFile(source_path, dest_path, true);
 			end
 		end
+		ParaAsset.CloseArchive(filename);
 	end
 end
 function NplCefBrowserManager:Init()
