@@ -30,7 +30,7 @@ function test_nplcef_window.Open2()
 	--NplCefWindowManager:Open("test_2","Title", "www.wikicraft.cn");
 end
 function test_nplcef_window.Open3()
-	NplCefWindowManager:Open("test_3","测试","www.wikicraft.cn", 200, 200);
+	NplCefWindowManager:Open("test_3","测试","www.wikicraft.cn");
 end
 function test_nplcef_window.Reload3()
 	NplCefWindowManager:Reload("test_3","www.baidu.com");

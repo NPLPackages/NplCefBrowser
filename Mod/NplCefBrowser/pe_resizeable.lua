@@ -23,6 +23,8 @@ function pe_resizeable:LoadComponent(parentElem, parentLayout, style)
 	self:SetControl(_this);
 	pe_resizeable._super.LoadComponent(self, _this, parentLayout, style);
 	_this:ApplyCss(self:GetStyle());
+	
+	_this:SetTrackerColor(self:GetStyle())
 end
 
 function pe_resizeable:OnLoadComponentBeforeChild(parentElem, parentLayout, css)

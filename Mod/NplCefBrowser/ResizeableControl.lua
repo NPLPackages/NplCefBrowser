@@ -33,50 +33,55 @@ ResizeableControl:Property({"TrackerSize", 5});
 function ResizeableControl:ctor()
 	self.trackers = {};
 	self.dragging_index = nil;
-	self.start_dragging_x = 0;
-	self.start_dragging_y = 0;
-	self.old_rect = {
+	self.darg_info = {
 		x = 0,
 		y = 0,
 		width = 0,
 		height = 0,
+
+		start_dragging_x = 0,
+		start_dragging_y = 0,
+
+		native_ui_x = 0,
+		native_ui_y = 0,
+		native_ui_width = 0,
+		native_ui_height = 0,
 	}
 	local k;
 	for k = 1,8 do
 		local tracker = Rectangle:new():init(self);
-		local v = math.mod(k,2);
-		if(v == 0)then
-			tracker:SetBackgroundColor("#ff0000");
-		else
-			tracker:SetBackgroundColor("#00ff00");
-		end
 		tracker:setGeometry(0,0,self.TrackerSize,self.TrackerSize);
 		table.insert(self.trackers,tracker);
 
 		tracker.handle_index = k;
 		tracker.mousePressEvent = function(t, event)
 			local index = t.handle_index;
-			commonlib.echo("==============handle_index");
-			commonlib.echo(index);
 			event:accept();
-
+			local window = self:GetWindow();
+			if(not window)then
+				return
+			end
 			self.dragging_index = index;
 
 			local x,y = ParaUI.GetMousePosition()
+			
+			local native_ui_x, native_ui_y, native_ui_width, native_ui_height = window.native_ui_obj:GetAbsPosition();
 
-			self.start_dragging_x = x;
-			self.start_dragging_y = y;
+			self.darg_info.start_dragging_x = x;
+			self.darg_info.start_dragging_y = y;
 
-			self.old_rect.x = self:x();
-			self.old_rect.y = self:y();
-			self.old_rect.width = self:width();
-			self.old_rect.height = self:height();
+			self.darg_info.x = self:x();
+			self.darg_info.y = self:y();
+			self.darg_info.width = self:width();
+			self.darg_info.height = self:height();
+
+			self.darg_info.native_ui_x = native_ui_x;
+			self.darg_info.native_ui_y = native_ui_y;
+			self.darg_info.native_ui_width = native_ui_width;
+			self.darg_info.native_ui_height = native_ui_height;
 
 		end
 		self.mouseReleaseEvent = function(t, event)
-			 commonlib.echo("==============mouseReleaseEvent");
-			commonlib.echo(event);
-			
 			self.dragging_index = nil;
 		end
 	end	
@@ -87,30 +92,70 @@ function ResizeableControl:ctor()
 			local tracker = self.trackers[index];
 			if(tracker)then
 				local x,y = ParaUI.GetMousePosition()
-				local dx = x - self.start_dragging_x;
-				local dy = y - self.start_dragging_y;
+				local dx = x - self.darg_info.start_dragging_x;
+				local dy = y - self.darg_info.start_dragging_y;
 
 
-				local width = self.old_rect.width;
-				local height = self.old_rect.height;
+				local old_x = self.darg_info.x;
+				local old_y = self.darg_info.y;
+				local width = self.darg_info.width;
+				local height = self.darg_info.height;
 
-
-				if(index == 4)then
-					width = width + dx;
-				elseif(index == 5)then
-					width = width + dx;
-					height = height + dy;
-				elseif(index == 6)then
-					height = height + dy;
-				end
-				self:resize(width,height);
-				self:layoutTrackers();
-
+				local native_ui_x = self.darg_info.native_ui_x;
+				local native_ui_y = self.darg_info.native_ui_y;
+				local native_ui_width = self.darg_info.native_ui_width;
+				local native_ui_height = self.darg_info.native_ui_height;
 				local window = self:GetWindow();
-				if(window)then
-					local _x, _y, _width, _height = window.native_ui_obj:GetAbsPosition();
-					window:setGeometry(_x,_y,width,height);
+
+				if(not window)then
+					return
 				end
+
+				local _x,_y,_width,_height;
+				if(index == 1)then
+					_x = dx + native_ui_x;
+					_y = dy + native_ui_y;
+					_width = width - dx;
+					_height = height - dy;
+				elseif(index == 2)then
+					_x = native_ui_x;
+					_y = dy + native_ui_y;
+					_width = width;
+					_height = height - dy;
+				elseif(index == 3)then
+					_x = native_ui_x;
+					_y = dy + native_ui_y;
+					_width = width + dx;
+					_height = height - dy;
+				elseif(index == 4)then
+					_x = native_ui_x;
+					_y = native_ui_y;
+					_width = width + dx;
+					_height = height;
+				elseif(index == 5)then
+					_x = native_ui_x;
+					_y = native_ui_y;
+					_width = width + dx;
+					_height = height + dy;
+				elseif(index == 6)then
+					_x = native_ui_x;
+					_y = native_ui_y;
+					_width = width ;
+					_height = height + dy;
+				elseif(index == 7)then
+					_x = dx + native_ui_x;
+					_y = native_ui_y;
+					_width = width - dx;
+					_height = height + dy;
+				elseif(index == 8)then
+					_x = dx + native_ui_x;
+					_y = native_ui_y;
+					_width = width - dx;
+					_height = height;
+				end
+				self:resize(_width,_height);
+				self:layoutTrackers();
+				window:setGeometry(_x,_y,_width,_height);
 			end
 		end
 	end})
@@ -179,6 +224,14 @@ function ResizeableControl:layoutTrackers()
 	for k,v in ipairs(self.trackers) do
 		local x,y,width,height = self:getHandle(k);
 		v:setGeometry(x,y,width,height);
+	end
+end
+function ResizeableControl:SetTrackerColor(style)
+	if(not style)then return end
+	local color = style["tracker-color"] or "#000000";
+	local k,v;
+	for k,v in ipairs(self.trackers) do
+		v:SetBackgroundColor(color);
 	end
 end
 

@@ -51,7 +51,6 @@ function NplCefBrowser:init()
 		NplCefBrowserManager:Start();
 	end
 end
-
 function NplCefBrowser:OnLogin()
 end
 -- called when a new world is loaded. 

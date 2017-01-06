@@ -13,10 +13,31 @@ NplCefBrowserManager:Show({id = id, visible = false});
 NplCefBrowserManager:ChangePosSize({id = id, x = 100, y = 100, width = 400, height = 400, });
 NplCefBrowserManager:Delete({id = id,});
 NplCefBrowserManager:Quit();
+
+NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
+local NplCefBrowserManager = commonlib.gettable("Mod.NplCefBrowserManager");
+NplCefBrowserManager:UnzipCefDll();
 ------------------------------------------------------------
 ]]
 local NplCefBrowserManager = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.NplCefBrowserManager"));
 
+function NplCefBrowserManager:UnzipCefDll()
+	LOG.std(nil, "info", "NplCefBrowserManager", "UnzipCefDll");
+	local filename = "Mod/NplCefBrowser.zip";
+	if(ParaIO.DoesAssetFileExist(filename, true))then
+		ParaAsset.OpenArchive(filename,false);	
+		local output = commonlib.Files.Find(nil, "", 0, 10000, "*.*", filename)
+		if(output and #output>0) then
+			commonlib.echo("==========output");
+			commonlib.echo(output);
+
+			local k,v;
+			for k,v in ipairs(output) do
+			ParaIO.CopyFile(v.filename, "test/" .. v.filename, true);
+			end
+		end
+	end
+end
 function NplCefBrowserManager:Init()
 	self.mRootWindows = {};
 	local cefroot = System.os.args("cefroot", "Mod/NplCefBrowser/cef3")

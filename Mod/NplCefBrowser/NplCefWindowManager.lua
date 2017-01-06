@@ -16,8 +16,8 @@ local NplCefWindowManager = commonlib.inherit(commonlib.gettable("Mod.ModBase"),
 NplCefWindowManager.page_ctrls = {};
 NplCefWindowManager.config = {};
 NplCefWindowManager.withControl = true;
-NplCefWindowManager.width = 1024;
-NplCefWindowManager.height = 768;
+NplCefWindowManager.width = 800;
+NplCefWindowManager.height = 560;
 NplCefWindowManager.default_window_name = "NplCefWindow_Instance";
 NplCefWindowManager.cefbrowser_name = "cefbrowser_instance"; -- the same as pe_cefbrowser_template.html
 NplCefWindowManager.default_template_url = "Mod/NplCefBrowser/pe_cefbrowser_template.html";
@@ -30,13 +30,18 @@ end
 function NplCefWindowManager:GetConfig(name)
 	return self.config[name];
 end
-function NplCefWindowManager:Open(name, title, url, x, y)
+function NplCefWindowManager:Open(name, title, url, alignment, x, y, width, height)
 	name = name or self.default_window_name;
 	if(self:GetPageCtrl(name))then
 		self:Show(name,true);
 	else
-		x = x or 100;
-		y = y or 100;
+		alignment = alignment or "_ct";
+		width = width or self.width;
+		height = height or self.height
+
+		x = x or -width/2;
+		y = y or -height/2;
+		
 		self.config[name] = {
 			title = title,
 		}
@@ -44,7 +49,7 @@ function NplCefWindowManager:Open(name, title, url, x, y)
 		window:Show({
 			name = name,
 			url = self.default_template_url, 
-			alignment ="_lt", left = x, top = y, width = self.width, height = self.height,
+			alignment = alignment, left = x, top = y, width = width, height = height,
 			allowDrag = true, 
 		});
 		NPL.load("(gl)script/ide/timer.lua");

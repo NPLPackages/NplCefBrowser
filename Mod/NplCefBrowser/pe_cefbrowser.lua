@@ -35,17 +35,19 @@ function pe_cefbrowser:OnAfterChildLayout(layout, left, top, right, bottom)
 
 	local url = self:GetString("url");
 	local withControl = self:GetBool("withControl");
-	if(NplCefBrowserManager:GetWindowConfig(id))then
-		NplCefBrowserManager:ChangePosSize({id = id, url = url, x = x, y = y, width = width, height = height, });
-	else
-		NplCefBrowserManager:Open({id = id, url = url, withControl = withControl, x = x, y = y, width = width, height = height, showTitleBar = true,});
-	end
+	NplCefBrowserManager:Open({id = id, url = url, withControl = withControl, x = x, y = y, width = width, height = height, });
 	CommonCtrl.AddControl(id, id);
-
-
+	
 	w.sizeEvent = function(o, event)
-		commonlib.echo("=========event");
-		commonlib.echo(event);
+		local screen_x, screen_y, screen_width, screen_height = w.native_ui_obj:GetAbsPosition();
+		local config = NplCefBrowserManager:GetWindowConfig(id);
+		if(config)then
+			local x = screen_x + left;
+			local y = screen_y + top;
+			local width = config.width;
+			local height = config.height;
+			NplCefBrowserManager:ChangePosSize({id = id, x = x, y = y, width = width, height = height, });
+		end
 	end
 end
 function pe_cefbrowser:GetID()
@@ -55,36 +57,32 @@ function pe_cefbrowser:GetID()
 end
 function pe_cefbrowser:Show(bShow)
 	local id = self:GetID()
-	if(NplCefBrowserManager:GetWindowConfig(id))then
-		NplCefBrowserManager:Show({id = id, visible = bShow, });
+	local config = NplCefBrowserManager:GetWindowConfig(id);
+	if(config)then
+		config.visible = bShow;
+		NplCefBrowserManager:Show(config);
 	end
 end
 function pe_cefbrowser:EnableWindow(enabled)
 	local id = self:GetID()
-	if(NplCefBrowserManager:GetWindowConfig(id))then
-		NplCefBrowserManager:EnableWindow({id = id, enabled = enabled, });
+	local config = NplCefBrowserManager:GetWindowConfig(id);
+	if(config)then
+		config.enabled = enabled;
+		NplCefBrowserManager:EnableWindow(config);
 	end
 end
 function pe_cefbrowser:Destroy()
 	local id = self:GetID()
-	if(NplCefBrowserManager:GetWindowConfig(id))then
+	local config = NplCefBrowserManager:GetWindowConfig(id);
+	if(config)then
 		NplCefBrowserManager:Delete({id = id, });
 	end
 end
 function pe_cefbrowser:Reload(url)
-	if(not url)then return end
 	local id = self:GetID()
 	local config = NplCefBrowserManager:GetWindowConfig(id);
 	if(config)then
-		local params = {
-			id = id,
-			url = url,
-			x = config.x,
-			y = config.y,
-			width = config.width,
-			height = config.height,
-			resize = true,
-		}
-		NplCefBrowserManager:Open(params);
+		config.url = url;
+		NplCefBrowserManager:Open(config);
 	end
 end
