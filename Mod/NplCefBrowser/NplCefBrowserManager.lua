@@ -3,6 +3,9 @@ Title: NplCefBrowserManager
 Author(s): leio
 Date: 2016.11.24
 Desc: 
+Manage npl communication with cef's dll, only one direction which npl call cef's dll is valid,
+npl don't receive a callback from cef's dll. a unique id is important for communication. this id's value is same as cef window's name.
+cef's dll source:https://github.com/tatfook/NplCefBrowserDev
 use the lib:
 ------------------------------------------------------------
 NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
@@ -13,14 +16,11 @@ NplCefBrowserManager:Show({id = id, visible = false});
 NplCefBrowserManager:ChangePosSize({id = id, x = 100, y = 100, width = 400, height = 400, });
 NplCefBrowserManager:Delete({id = id,});
 NplCefBrowserManager:Quit();
-
-NPL.load("(gl)Mod/NplCefBrowser/NplCefBrowserManager.lua");
-local NplCefBrowserManager = commonlib.gettable("Mod.NplCefBrowserManager");
-NplCefBrowserManager:UnzipCefDll();
 ------------------------------------------------------------
 ]]
 local NplCefBrowserManager = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.NplCefBrowserManager"));
 
+-- Unzip cef's dll so that npl could communicate with it.
 function NplCefBrowserManager:UnzipCefDll()
 	LOG.std(nil, "info", "NplCefBrowserManager", "UnzipCefDll");
 	local filename = "Mod/NplCefBrowser.zip";
@@ -43,6 +43,7 @@ function NplCefBrowserManager:UnzipCefDll()
 		ParaAsset.CloseArchive(filename);
 	end
 end
+-- Initialize cef plugin dll.
 function NplCefBrowserManager:Init()
 	self.mRootWindows = {};
 	local cefroot = System.os.args("cefroot", "Mod/NplCefBrowser/cef3")

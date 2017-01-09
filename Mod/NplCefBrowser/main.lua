@@ -51,6 +51,8 @@ function NplCefBrowser:init()
 	NplCefBrowserManager:Init();
 	if(NplCefBrowserManager:HasCefPlugin())then
 		NplCefBrowserManager:Start();
+	else
+		LOG.std(nil, "warning", "Can't find NplCefBrowser dll");
 	end
 end
 function NplCefBrowser:OnLogin()
