@@ -6,6 +6,7 @@ NplCefBrowser is a npl package which include a wrapper for Chromium Embedded Fra
 					   [cef's dll source is here](https://github.com/tatfook/NplCefBrowserDev)
 - pe_cefbrowser:a mcml tag which inlucde a cef window.
 - pe_resizeable:a mcml tag which can resize cef window.
+
 ### Example
 ```lua
 NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
@@ -15,7 +16,8 @@ NplCefWindowManager:Open(); -- Open a default window
 ```lua
 NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
 local NplCefWindowManager = commonlib.gettable("Mod.NplCefWindowManager");
-NplCefWindowManager:Open("my_window", "Npl window", "http://www.nplproject.com/", "_lt", 100, 100, 800, 560); -- Open a new window
+ -- Open a new window
+NplCefWindowManager:Open("my_window", "Npl window", "http://www.nplproject.com/", "_lt", 100, 100, 800, 560);
 ```
 ### Screenshot
 ![image](https://cloud.githubusercontent.com/assets/5885941/21758468/168ddc44-d677-11e6-865f-412783282bae.png)
