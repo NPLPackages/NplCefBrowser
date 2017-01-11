@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommand>F:\pe_git\ParaCraftSDK\redist\paraengineclient.exe</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>mc="true" dev="$(SolutionDir)"  mod="NplCefBrowser" isDevEnv="true" world="worlds/DesignHouse/test" cefroot="Mod/NplCefBrowser/cef3"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>mc="true" dev="$(SolutionDir)"  mod="NplCefBrowser" isDevEv="true" world="worlds/DesignHouse/test" cefroot="../_mod/NplCefBrowser/cef3"</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>..\..\redist</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>

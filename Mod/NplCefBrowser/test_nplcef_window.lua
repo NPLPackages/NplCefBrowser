@@ -10,7 +10,6 @@ local test_nplcef_window = commonlib.gettable("Mod.test_nplcef_window");
 test_nplcef_window.Open1();
 test_nplcef_window.Open2();
 test_nplcef_window.Open3();
-test_nplcef_window.Reload3();
 ------------------------------------------------------------
 ]]
 NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");

@@ -4,7 +4,7 @@ Author(s): leio
 Date: 2016.11.24
 Desc: 
 Manage npl communication with cef's dll, only one direction which npl call cef's dll is valid,
-npl don't receive a callback from cef's dll. a unique id is important for communication. this id's value is same as cef window's name.
+npl don't receive a callback from cef's dll. a unique id is important for communication. this id's value is the same as cef window's name.
 cef's dll source:https://github.com/tatfook/NplCefBrowserDev
 use the lib:
 ------------------------------------------------------------
@@ -24,20 +24,20 @@ local NplCefBrowserManager = commonlib.inherit(commonlib.gettable("Mod.ModBase")
 function NplCefBrowserManager:UnzipCefDll()
 	LOG.std(nil, "info", "NplCefBrowserManager", "UnzipCefDll");
 	local filename = "Mod/NplCefBrowser.zip";
-	local cef3_root = "/cef3";
+	local cef3_root = "cef3";
 	if(ParaIO.DoesAssetFileExist(filename, true))then
 		LOG.std(nil, "info", "NplCefBrowserManager", "ParaAsset.OpenArchive:%s",filename);
 		ParaAsset.OpenArchive(filename);	
+		LOG.std(nil, "info", "NplCefBrowserManager", "search root:%s",cef3_root);
 		local output = commonlib.Files.SearchFiles({}, cef3_root, {":.*dll", ":.*bin", ":.*exe", ":.*pak", ":.*dat"}, 10, 10000, true, nil, filename);
-		commonlib.echo("============output");
-		commonlib.echo(output);
+		LOG.std(nil, "info", "NplCefBrowserManager search result:", output);
 		if(output and #output>0) then
 			local k,v; 
 			for k,v in ipairs(output) do
-				local source_path = v;
-				local dest_path = "Mod/" .. source_path;
-				commonlib.echo({source_path, dest_path});
-				ParaIO.CopyFile(source_path, dest_path, true);
+				local source_path = cef3_root .. v;
+				local dest_path = "Mod/NplCefBrowser/" .. source_path;
+				local re = ParaIO.CopyFile(source_path, dest_path, true);
+				LOG.std(nil, "info", "NplCefBrowserManager", "copy(%s) %s -> %s",tostring(re),source_path,dest_path);
 			end
 		end
 		ParaAsset.CloseArchive(filename);

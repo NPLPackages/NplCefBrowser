@@ -5,7 +5,7 @@ Date: 2016.12.29
 Desc: 
 NplCefWindowManager manager all of cef windows. It include below important compoments:
 1 NplCefBrowserManager:manage npl communication with cef's dll, only one direction which npl call cef's dll is valid,
-					   npl don't receive a callback from cef's dll. a unique id is important for communication. this id's value is same as cef window's name.
+					   npl don't receive a callback from cef's dll. a unique id is important for communication. this id's value is the same as cef window's name.
 					   cef's dll source:https://github.com/tatfook/NplCefBrowserDev
 2 pe_cefbrowser:a mcml tag which inlucde a cef window.
 3 pe_resizeable:a mcml tag which can resize cef window.
