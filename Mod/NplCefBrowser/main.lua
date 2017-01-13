@@ -49,9 +49,7 @@ function NplCefBrowser:init()
 
 	NplCefBrowserManager:Init();
 	--first unzip cef3 dll
-	if(not NplCefBrowserManager:HasCefPlugin())then
-		NplCefBrowserManager:UnzipCefDll();
-	end
+	NplCefBrowserManager:CheckVersion()
 	if(NplCefBrowserManager:HasCefPlugin())then
 		NplCefBrowserManager:Start();
 	else
