@@ -12,7 +12,7 @@ NplCefBrowser is a npl package which include a wrapper for Chromium Embedded Fra
 - Download [NplCefBrowser-0.1-beta](https://github.com/NPLPackages/NplCefBrowser/releases/download/0.1-beta/NplCefBrowser.zip) to /Mod.
 - Start Paracraft and only enable the mod of NplCefBrowser, don't enable the mod of NplCef3.
 - After entered a world, use below example to test.
-
+![image](https://cloud.githubusercontent.com/assets/5885941/22096783/6d7f80a0-de58-11e6-86f5-e4f03fb56518.png)
 ### Example
 ```lua
 NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
