@@ -61,6 +61,10 @@ function NplCefBrowserManager:ReadNewVersionFromZipFile(zip_filename)
 end
 -- CheckVersion and unzip cef's dll so that npl could communicate with it.
 function NplCefBrowserManager:CheckVersion()
+	if(self:IsDebug())then
+		LOG.std(nil, "info", "NplCefBrowserManager", "Debug mode ignored CheckVersion.");
+		return
+	end
 	LOG.std(nil, "info", "NplCefBrowserManager", "UnzipCefDll");
 	local filename = "Mod/NplCef3.zip";
 	local cef3_root = "nplcef3/mod/";
@@ -92,20 +96,23 @@ function NplCefBrowserManager:CheckVersion()
 		
 	end
 end
+function NplCefBrowserManager:IsDebug()
+	local cefdebug = System.os.args("cefdebug", false)
+	if(cefdebug == "true" or cefdebug == "True" )then
+		return true;
+	end
+	return cefdebug;
+end
 -- Initialize cef plugin dll.
 function NplCefBrowserManager:Init()
 	self.mRootWindows = {};
 	local cefroot = System.os.args("cefroot", "Mod/NplCef3/Mod/NplCef3/cef3")
-	local cefdebug = System.os.args("cefdebug", "false")
 	self.cefroot = cefroot;
 	self.is_start = false;
-	if(cefdebug == "true" or cefdebug == "True" )then
-		self.plugin_name = self.cefroot .. "/NplCefPlugin_d.dll";
-		self.process_name = self.cefroot .. "/NplCefProcess_d.exe";
-	else
-		self.plugin_name = self.cefroot .. "/NplCefPlugin.dll";
-		self.process_name = self.cefroot .. "/NplCefProcess.exe";
-	end
+
+	self.plugin_name = cefroot .. "/" .. System.os.args("cef_plugin", "NplCefPlugin.dll");
+	self.process_name = cefroot .. "/" .. System.os.args("cef_process", "NplCefProcess.exe");
+	
 	self.default_id = "cef_default_window";
 
 	LOG.std(nil, "info", "NplCefBrowserManager", "===========================Init===========================");

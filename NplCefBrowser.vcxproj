@@ -150,6 +150,7 @@
     <None Include="Mod\NplCefBrowser\pe_resizeable.lua" />
     <None Include="Mod\NplCefBrowser\ResizeableControl.lua" />
     <None Include="Mod\NplCefBrowser\test_nplcef_window.lua" />
+    <None Include="Run_debug.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

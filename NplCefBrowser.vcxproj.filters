@@ -33,5 +33,6 @@
     <None Include="Mod\NplCefBrowser\pe_resizeable.lua">
       <Filter>Mod\NplCefBrowser</Filter>
     </None>
+    <None Include="Run_debug.bat" />
   </ItemGroup>
 </Project>
