@@ -25,6 +25,7 @@ NPL.load("(gl)Mod/NplCefBrowser/NplCefWindowManager.lua");
 local NplCefWindowManager = commonlib.gettable("Mod.NplCefWindowManager");
  -- Open a new window
 NplCefWindowManager:Open("my_window", "Npl window", "http://www.nplproject.com/", "_lt", 100, 100, 800, 560);
+--aaaaa
 ```
 ### Screenshot
 ![image](https://cloud.githubusercontent.com/assets/5885941/21758468/168ddc44-d677-11e6-865f-412783282bae.png)
