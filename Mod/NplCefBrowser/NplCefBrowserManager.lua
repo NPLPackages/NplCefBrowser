@@ -209,7 +209,7 @@ function NplCefBrowserManager:DoActivate(value)
 		LOG.std(nil, "error", "NplCefBrowserManager", "plugin name is nil.");
 		return
 	end
-	LOG.std(nil, "info", "NplCefBrowserManager DoActivate", value);
+	LOG.std(nil, "debug", "NplCefBrowserManager DoActivate", value);
 	if(not value)then
 		return
 	end
