@@ -51,8 +51,10 @@ end
 -- @param width:window's width.
 -- @param height:window's height.
 -- @param window_template_url:a mcml page which rendering the style of cef window, default value is "Mod/NplCefBrowser/pe_cefbrowser_template.html"
-function NplCefWindowManager:Open(name, title, url, alignment, x, y, width, height, window_template_url)
+-- @param zorder:the show level of Window,default value is 10001.
+function NplCefWindowManager:Open(name, title, url, alignment, x, y, width, height, window_template_url, zorder)
 	name = name or self.default_window_name;
+	zorder = zorder or 10001;
 	if(self:GetPageCtrl(name))then
 		self:Show(name,true);
 	else
@@ -74,6 +76,7 @@ function NplCefWindowManager:Open(name, title, url, alignment, x, y, width, heig
 			url = window_template_url, 
 			alignment = alignment, left = x, top = y, width = width, height = height,
 			allowDrag = true, 
+			zorder = zorder,
 		});
 		NPL.load("(gl)script/ide/timer.lua");
 		local mytimer = commonlib.Timer:new({callbackFunc = function(timer)

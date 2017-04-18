@@ -5,6 +5,10 @@ Date: 2016.12.29
 Desc: 
 use the lib:
 ------------------------------------------------------------
+NPL.load("(gl)Mod/NplCefBrowser/main.lua");
+local NplCefBrowser = commonlib.gettable("Mod.NplCefBrowser");
+NplCefBrowser:init();
+
 NPL.load("(gl)Mod/NplCefBrowser/test_nplcef_window.lua");
 local test_nplcef_window = commonlib.gettable("Mod.test_nplcef_window");
 test_nplcef_window.Open1();
