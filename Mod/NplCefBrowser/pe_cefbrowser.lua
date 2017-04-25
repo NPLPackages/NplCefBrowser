@@ -54,17 +54,19 @@ function pe_cefbrowser:OnAfterChildLayout(layout, left, top, right, bottom)
 	local timer = resize_monitors[id];
 	if(not timer)then
 		local timer = commonlib.Timer:new({callbackFunc = function(timer)
-			local screen_x, screen_y, screen_width, screen_height = w.native_ui_obj:GetAbsPosition();
-			local config = NplCefBrowserManager:GetWindowConfig(id);
-			if(config)then
-				local x = screen_x + left;
-				local y = screen_y + top;
-				if(x ~= config.x or y ~= config.y)then
-					-- sizeEvent has a bug,when max size of paracraft window, mcml window can't receive sizeEvent.
-					-- here only check position if changed.
-					resize();
-				end
-			end
+            if(w and w.native_ui_obj)then
+			    local screen_x, screen_y, screen_width, screen_height = w.native_ui_obj:GetAbsPosition();
+			    local config = NplCefBrowserManager:GetWindowConfig(id);
+			    if(config)then
+				    local x = screen_x + left;
+				    local y = screen_y + top;
+				    if(x ~= config.x or y ~= config.y)then
+					    -- sizeEvent has a bug,when max size of paracraft window, mcml window can't receive sizeEvent.
+					    -- here only check position if changed.
+					    resize();
+				    end
+			    end
+            end
 		end})
 		timer:Change(0,10)
 		resize_monitors[id] = timer;
