@@ -1,0 +1,3 @@
+[submodule "npl_packages/NplCef3"]
+	path = npl_packages/NplCef3
+	url = https://github.com/NPLPackages/NplCef3
