@@ -10,7 +10,9 @@ NplCefBrowser is a npl package which include a wrapper of Chromium Embedded Fram
 ### Install
 - Download [NplCef3-0.1-beta](https://github.com/NPLPackages/NplCef3/releases/download/0.1-beta/NplCef3.zip) to /Mod.
 - Download [NplCefBrowser-0.1-beta](https://github.com/NPLPackages/NplCefBrowser/releases/download/0.1-beta/NplCefBrowser.zip) to /Mod.
-- Start Paracraft and only enable the mod of NplCefBrowser, don't enable the mod of NplCef3.
+- Make NplCef3 valid
+  - Start Paracraft and only enable the mod of NplCefBrowser, don't enable the mod of NplCef3.
+  - If NplCefBrower isn't working, close paracraft and extract NplCef3.zip to /Mod directly. 
 - After entered a world, use below example to test.
 ![image](https://cloud.githubusercontent.com/assets/5885941/22096783/6d7f80a0-de58-11e6-86f5-e4f03fb56518.png)
 
