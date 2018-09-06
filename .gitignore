@@ -1,11 +1,13 @@
 .vs
-npl_packages
+npl_packages/
+/NplCefBrowser/
 *.db
 *.opendb
 *.sdf
 *.suo
 *.log
 *.txt
+*.zip
 Debug
 Release
 cef3

@@ -1,5 +1,5 @@
 # NplCefBrowser
-NplCefBrowser is a npl package which include a wrapper of Chromium Embedded Framework 3(cef),After installed this package, Npl could create cef3 browser.
+NplCefBrowser is a npl package and paracraft mod which include a wrapper of Chromium Embedded Framework 3(cef). after installed this package, Npl could create cef3 browser.
 ### Main classes
 - NplCefBrowserManager:manage npl communication with cef's dll, only one direction which npl call cef's dll is valid,
 					   npl don't receive a callback from cef's dll. a unique id is important for communication. this id's value is same as cef window's name.

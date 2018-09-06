@@ -38,16 +38,16 @@ function NplCefBrowserManager:GetVersionValue(version_txt_path)
 	return 0;
 end
 -- Read old version
-function NplCefBrowserManager:ReadOldVersion()
+function NplCefBrowserManager:GetInstalledVersion()
 	local version_value = -1;
 	local old_version_txt_path = self.cefroot .. "/version.txt";
-	old_version_txt_path = ParaIO.GetCurDirectory(0) .. old_version_txt_path;
 	if(ParaIO.DoesFileExist(old_version_txt_path))then
 		version_value = self:GetVersionValue(old_version_txt_path);
 	end
 	return version_value;
 
 end
+
 -- Read new version from zip file.
 function NplCefBrowserManager:ReadNewVersionFromZipFile(zip_filename)
 	local version_value = -1;
@@ -59,41 +59,40 @@ function NplCefBrowserManager:ReadNewVersionFromZipFile(zip_filename)
 	end
 	return version_value;
 end
+
+function NplCefBrowserManager:GetPluginVersion()
+	return self:GetVersionValue("npl_packages/NplCef3/Mod/NplCef3/cef3/version.txt");
+end
+
+
 -- CheckVersion and unzip cef's dll so that npl could communicate with it.
 function NplCefBrowserManager:CheckVersion()
 	if(self:IsDebug())then
 		LOG.std(nil, "info", "NplCefBrowserManager", "Debug mode ignored CheckVersion.");
 		return
 	end
-	LOG.std(nil, "info", "NplCefBrowserManager", "UnzipCefDll");
-	local filename = "Mod/NplCef3.zip";
-	local cef3_root = "nplcef3/mod/";
-	if(ParaIO.DoesAssetFileExist(filename, true))then
-		local new_version = self:ReadNewVersionFromZipFile(filename);
-		local old_version = self:ReadOldVersion();
-		LOG.std(nil, "info", "NplCefBrowserManager", "Check version:old_version = %d, new_version = %d",old_version,new_version);
-		if(old_version >= new_version)then
-			LOG.std(nil, "info", "NplCefBrowserManager", "Cefdll version is latest.");
-			return;
+	
+	
+	local new_version = self:GetPluginVersion();
+	local old_version = self:GetInstalledVersion();
+	LOG.std(nil, "info", "NplCefBrowserManager", "Check version:installed_version = %d, plugin_version = %d",old_version,new_version);
+	if(old_version >= new_version)then
+		LOG.std(nil, "info", "NplCefBrowserManager", "Chrome browser dll version is up to date.");
+		return;
+	end
+	--Delete old cef3.
+	local cef3_root = "npl_packages/NplCef3/Mod/NplCef3/";
+	ParaIO.DeleteFile("Mod/NplCef3");
+	LOG.std(nil, "info", "NplCefBrowserManager", "installing latest browser plugin from: %s in zip archive",cef3_root);
+	local output = commonlib.Files.SearchFiles({}, cef3_root, ":.*", 10, 10000, true, nil, "*.zip");
+	LOG.std(nil, "info", "NplCefBrowserManager search result:", output);
+	if(output and #output>0) then
+		for k,v in ipairs(output) do
+			local source_path = cef3_root .. v;
+			local dest_path = "Mod/NplCef3/Mod/NplCef3/" .. v;
+			local re = ParaIO.CopyFile(source_path, dest_path, true);
+			LOG.std(nil, "info", "NplCefBrowserManager", "copy(%s) %s -> %s",tostring(re),source_path,dest_path);
 		end
-		--Delete old cef3.
-		ParaIO.DeleteFile("Mod/NplCef3/Mod/NplCef3");
-		LOG.std(nil, "info", "NplCefBrowserManager", "ParaAsset.OpenArchive:%s",filename);
-		ParaAsset.OpenArchive(filename);	
-		LOG.std(nil, "info", "NplCefBrowserManager", "search root:%s",cef3_root);
-		local output = commonlib.Files.SearchFiles({}, cef3_root, {":.*dll", ":.*bin", ":.*exe", ":.*pak", ":.*dat", ":.*txt"}, 10, 10000, true, nil, filename);
-		LOG.std(nil, "info", "NplCefBrowserManager search result:", output);
-		if(output and #output>0) then
-			local k,v; 
-			for k,v in ipairs(output) do
-				local source_path = cef3_root .. v;
-				local dest_path = "Mod/" .. source_path;
-				local re = ParaIO.CopyFile(source_path, dest_path, true);
-				LOG.std(nil, "info", "NplCefBrowserManager", "copy(%s) %s -> %s",tostring(re),source_path,dest_path);
-			end
-		end
-		ParaAsset.CloseArchive(filename);
-		
 	end
 end
 function NplCefBrowserManager:IsDebug()
@@ -140,14 +139,13 @@ function NplCefBrowserManager:CreateBrowserParams()
 	return params;
 end
 function NplCefBrowserManager:HasCefPlugin()
-	local root = ParaIO.GetCurDirectory(0);
-	local process_path = root .. self:GetProcessName();
-	local plugin_path = root .. self:GetPluginName();
+	local process_path = self:GetProcessName();
+	local plugin_path = self:GetPluginName();
 	if(ParaIO.DoesFileExist(process_path) and ParaIO.DoesFileExist(plugin_path))then
 		return true;
 	end
 end
-function NplCefBrowserManager:Start()
+function NplCefBrowserManager:CheckLoadPlugin()
 	if(self.is_start)then
 		return
 	end	
@@ -204,6 +202,7 @@ function NplCefBrowserManager:Quit(p)
 	self.is_start = false;
 end
 function NplCefBrowserManager:DoActivate(value)
+	self:CheckLoadPlugin();
 	local name = self:GetPluginName();
 	if(not name)then
 		LOG.std(nil, "error", "NplCefBrowserManager", "plugin name is nil.");
