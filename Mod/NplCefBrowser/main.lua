@@ -48,12 +48,12 @@ function NplCefBrowser:init()
 	NplCefBrowserManager:Init();
 	--first unzip cef3 dll
 	NplCefBrowserManager:CheckVersion()
-	if( NplCefBrowserManager:HasCefPlugin())then
-		-- TODO: delayed Loading will crash the app, I do not know why. 
-		NplCefBrowserManager:CheckLoadPlugin();
-	else
-		LOG.std(nil, "warning", "Can't find NplCefBrowser dll");
-	end
+	-- if( NplCefBrowserManager:HasCefPlugin())then
+	-- 	-- TODO: delayed Loading will crash the app, I do not know why. 
+	-- 	NplCefBrowserManager:CheckLoadPlugin();
+	-- else
+	-- 	LOG.std(nil, "warning", "Can't find NplCefBrowser dll");
+	-- end
 end
 function NplCefBrowser:OnLogin()
 end
